@@ -70,4 +70,11 @@ public class RouteServiceImpl implements RouteService {
 
         return route;
     }
+
+    @Override
+    public PageBean<Route> queryFavourite() {
+        PageBean<Route> pb = new PageBean<Route>();
+        pb.setList(routeDao.queryFavourite());
+        return pb;
+    }
 }

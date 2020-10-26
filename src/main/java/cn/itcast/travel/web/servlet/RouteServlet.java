@@ -137,5 +137,11 @@ public class RouteServlet extends BaseServlet {
 
     }
 
+    public void queryFavourite(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        PageBean<Route> pb = routeService.queryFavourite();
+        writeValue(pb,response);
+    }
+
+
 
 }

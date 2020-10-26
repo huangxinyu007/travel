@@ -22,7 +22,32 @@
     <!--[if lt IE 9]>
     <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="js/getParameter.js"></script>
     <![endif]-->
+    <script>
+        $(function () {
+            $.get("route/queryFavourite",{},function (pb) {
+                var route_lis = "";
+                for (var i = 0; i < pb.list.length; i++) {
+                    //获取{rid:1,rname:"xxx"}
+                    var route = pb.list[i];
+
+                    var li =
+                        ' <div class="col-md-3">\n' +
+                        '     <a href="javascript:;">\n' +
+                        '        <img src="'+route.rimage+'" alt="">\n' +
+                        '        <div class="has_border">\n' +
+                        '            <h3>'+route.rname+'</h3>\n' +
+                        '            <div class="price">网付价<em>￥</em><strong>'+route.price+'</strong><em>起</em></div>\n' +
+                        '        </div>\n' +
+                        '     </a>\n' +
+                        ' </div>\n';
+                    route_lis += li;
+                }
+                $("#panshow1").html(route_lis);
+            });
+        });
+    </script>
 </head>
 <body>
 <!--引入头部-->
@@ -89,7 +114,7 @@
             <!-- Tab panes -->
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="popularity">
-                    <div class="row">
+                    <div id="panshow1" class="row">
                         <div class="col-md-3">
                             <a href="javascript:;">
                                 <img src="images/jiangxuan_4.jpg" alt="">

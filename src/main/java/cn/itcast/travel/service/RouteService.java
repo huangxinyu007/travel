@@ -23,4 +23,6 @@ public interface RouteService {
      * @return
      */
     public Route findOne(String rid);
+
+    public PageBean<Route> queryFavourite();
 }

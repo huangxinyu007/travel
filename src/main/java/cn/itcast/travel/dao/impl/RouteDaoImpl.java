@@ -5,7 +5,10 @@ import cn.itcast.travel.domain.Route;
 import cn.itcast.travel.util.JDBCUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +30,7 @@ public class RouteDaoImpl implements RouteDao {
             params.add(cid);//添加？对应的值
         }
 
-        if(rname != null && rname.length() > 0){
+        if(rname != null && rname.length() > 0 && !"null".equalsIgnoreCase(rname)){
             sb.append(" and rname like ? ");
 
             params.add("%"+rname+"%");
@@ -54,7 +57,7 @@ public class RouteDaoImpl implements RouteDao {
             params.add(cid);//添加？对应的值
         }
 
-        if(rname != null && rname.length() > 0){
+        if(rname != null && rname.length() > 0 && !"null".equalsIgnoreCase(rname)){
             sb.append(" and rname like ? ");
 
             params.add("%"+rname+"%");
@@ -74,5 +77,33 @@ public class RouteDaoImpl implements RouteDao {
     public Route findOne(int rid) {
         String sql = "select * from tab_route where rid = ?";
         return template.queryForObject(sql,new BeanPropertyRowMapper<Route>(Route.class),rid);
+    }
+
+    @Override
+    public List<Route> queryFavourite() {
+        String sql = " SELECT rid, COUNT(rid) AS num FROM tab_favorite GROUP BY rid ORDER BY num DESC ";
+        List<Integer> ridList = new ArrayList<>(4);
+        template.query(sql, new RowMapper<List<Integer>>() {
+            @Override
+            public List<Integer> mapRow(ResultSet rs, int i) throws SQLException {
+                int rid = rs.getInt("rid");
+                if (ridList.size() < 4) {
+                    ridList.add(rid);
+                }
+                return null;
+            }
+        });
+        List params = new ArrayList();
+        String numStr = "";
+        for (int i = 0; i < ridList.size(); i++) {
+            if (i == ridList.size() - 1) {
+                numStr += " ? ";
+            } else {
+                numStr += " ?, ";
+            }
+            params.add(ridList.get(i));
+        }
+        String sql1 = " select * from tab_route where rid IN (" +numStr+ ") ";
+        return template.query(sql1, new BeanPropertyRowMapper<Route>(Route.class), params.toArray());
     }
 }

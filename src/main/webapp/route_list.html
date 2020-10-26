@@ -144,8 +144,13 @@
                      //拼接字符串
                      lis += li;
                  }*/
-                var lastPage = '<li class="threeword"><a href="javascript:;">末页</a></li>';
-                var nextPage = '<li class="threeword"><a href="javascript:;">下一页</a></li>';
+                var lastPage = '<li onclick="javascipt:load('+cid+','+pb.totalPage+',\''+rname+'\')"><a href="javascript:void(0)">末页</a></li>';
+                //计算上一页的页码
+                var beforeNum =  pb.currentPage + 1;
+                if(beforeNum >= pb.totalPage){
+                    beforeNum = pb.totalPage;
+                }
+                var nextPage = '<li  onclick="javascipt:load('+cid+','+beforeNum+',\''+rname+'\')" class="threeword"><a href="javascript:void(0)">下一页</a></li>';
 
                 lis += nextPage;
                 lis += lastPage;
