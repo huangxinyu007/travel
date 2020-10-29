@@ -6,6 +6,28 @@
         <link rel="stylesheet" type="text/css" href="css/common.css">
         <link rel="stylesheet" type="text/css" href="css/ranking-list.css">
         <script src="js/jquery-3.3.1.js"></script>
+        <script>
+            $.get("route/queryFavourite",{},function (pb) {
+                var route_lis = "";
+                for (var i = 0; i < pb.list.length; i++) {
+                    //获取{rid:1,rname:"xxx"}
+                    var route = pb.list[i];
+
+                    var li =
+                        ' <div class="col-md-3">\n' +
+                        '     <a href="javascript:;">\n' +
+                        '        <img src="'+route.rimage+'" alt="">\n' +
+                        '        <div class="has_border">\n' +
+                        '            <h3>'+route.rname+'</h3>\n' +
+                        '            <div class="price">网付价<em>￥</em><strong>'+route.price+'</strong><em>起</em></div>\n' +
+                        '        </div>\n' +
+                        '     </a>\n' +
+                        ' </div>\n';
+                    route_lis += li;
+                }
+                $("#panshow1").html(route_lis);
+            });
+        </script>
     </head>
     <body>
     <!--引入头部-->

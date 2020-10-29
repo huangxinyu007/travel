@@ -77,4 +77,11 @@ public class RouteServiceImpl implements RouteService {
         pb.setList(routeDao.queryFavourite());
         return pb;
     }
+
+    @Override
+    public PageBean<Route> queryRandom() {
+        PageBean<Route> pb = new PageBean<Route>();
+        pb.setList(routeDao.queryRandom());
+        return pb;
+    }
 }

@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class RouteDaoImpl implements RouteDao {
     private JdbcTemplate template = new JdbcTemplate(JDBCUtils.getDataSource());
@@ -105,5 +106,23 @@ public class RouteDaoImpl implements RouteDao {
         }
         String sql1 = " select * from tab_route where rid IN (" +numStr+ ") ";
         return template.query(sql1, new BeanPropertyRowMapper<Route>(Route.class), params.toArray());
+    }
+
+    @Override
+    public List<Route> queryRandom() {
+        String sql = " select * from tab_route where rid in (";
+        StringBuilder sb = new StringBuilder(sql);
+        List params = new ArrayList();//条件们
+        int totalCount = findTotalCount(0, "");
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            if (i == 5) {
+                sb.append("?)");
+            } else {
+                sb.append("?, ");
+            }
+            params.add(random.nextInt(totalCount));
+        }
+        return template.query(sb.toString(), new BeanPropertyRowMapper<Route>(Route.class), params.toArray());
     }
 }

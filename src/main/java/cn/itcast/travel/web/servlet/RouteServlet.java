@@ -142,6 +142,9 @@ public class RouteServlet extends BaseServlet {
         writeValue(pb,response);
     }
 
-
+    public void queryRandom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        PageBean<Route> pb = routeService.queryRandom();
+        writeValue(pb,response);
+    }
 
 }

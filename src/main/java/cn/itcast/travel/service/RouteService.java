@@ -25,4 +25,6 @@ public interface RouteService {
     public Route findOne(String rid);
 
     public PageBean<Route> queryFavourite();
+
+    public PageBean<Route> queryRandom();
 }

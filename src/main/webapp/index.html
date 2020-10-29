@@ -46,6 +46,86 @@
                 }
                 $("#panshow1").html(route_lis);
             });
+            $.get("route/queryRandom",{},function (pb) {
+                var route_lis = "";
+                for (var i = 0; i < 4; i++) {
+                    //获取{rid:1,rname:"xxx"}
+                    var route = pb.list[i];
+
+                    var li =
+                        ' <div class="col-md-3">\n' +
+                        '     <a href="javascript:;">\n' +
+                        '        <img src="'+route.rimage+'" alt="">\n' +
+                        '        <div class="has_border">\n' +
+                        '            <h3>'+route.rname+'</h3>\n' +
+                        '            <div class="price">网付价<em>￥</em><strong>'+route.price+'</strong><em>起</em></div>\n' +
+                        '        </div>\n' +
+                        '     </a>\n' +
+                        ' </div>\n';
+                    route_lis += li;
+                }
+                $("#panshow2").html(route_lis);
+            });
+            $.get("route/queryRandom",{},function (pb) {
+                var route_lis = "";
+                for (var i = 0; i < 4; i++) {
+                    //获取{rid:1,rname:"xxx"}
+                    var route = pb.list[i];
+
+                    var li =
+                        ' <div class="col-md-3">\n' +
+                        '     <a href="javascript:;">\n' +
+                        '        <img src="'+route.rimage+'" alt="">\n' +
+                        '        <div class="has_border">\n' +
+                        '            <h3>'+route.rname+'</h3>\n' +
+                        '            <div class="price">网付价<em>￥</em><strong>'+route.price+'</strong><em>起</em></div>\n' +
+                        '        </div>\n' +
+                        '     </a>\n' +
+                        ' </div>\n';
+                    route_lis += li;
+                }
+                $("#panshow3").html(route_lis);
+            });
+            $.get("route/queryRandom",{},function (pb) {
+                var route_lis = "";
+                for (var i = 0; i < 6; i++) {
+                    //获取{rid:1,rname:"xxx"}
+                    var route = pb.list[i];
+
+                    var li =
+                        ' <div class="col-md-4">\n' +
+                        '     <a href="route_detail.html?rid='+route.rid+'">\n' +
+                        '        <img src="'+route.rimage+'" alt="">\n' +
+                        '        <div class="has_border">\n' +
+                        '            <h3>'+route.rname+'</h3>\n' +
+                        '            <div class="price">网付价<em>￥</em><strong>'+route.price+'</strong><em>起</em></div>\n' +
+                        '        </div>\n' +
+                        '     </a>\n' +
+                        ' </div>\n';
+                    route_lis += li;
+                }
+                $("#panshow4").html(route_lis);
+            });
+            $.get("route/queryRandom",{},function (pb) {
+                var route_lis = "";
+                for (var i = 0; i < 6; i++) {
+                    //获取{rid:1,rname:"xxx"}
+                    var route = pb.list[i];
+
+                    var li =
+                        ' <div class="col-md-4">\n' +
+                        '     <a href="route_detail.html?rid='+route.rid+'">\n' +
+                        '        <img src="'+route.rimage+'" alt="">\n' +
+                        '        <div class="has_border">\n' +
+                        '            <h3>'+route.rname+'</h3>\n' +
+                        '            <div class="price">网付价<em>￥</em><strong>'+route.price+'</strong><em>起</em></div>\n' +
+                        '        </div>\n' +
+                        '     </a>\n' +
+                        ' </div>\n';
+                    route_lis += li;
+                }
+                $("#panshow5").html(route_lis);
+            });
         });
     </script>
 </head>
@@ -154,7 +234,7 @@
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="newest">
-                    <div class="row">
+                    <div class="row" id="panshow2">
                         <div class="col-md-3">
                             <a href="javascript:;">
                                 <img src="images/jiangxuan_1.jpg" alt="">
@@ -194,7 +274,7 @@
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="theme">
-                    <div class="row">
+                    <div class="row" id="panshow3">
                         <div class="col-md-3">
                             <a href="javascript:;">
                                 <img src="images/jiangxuan_2.jpg" alt="">
@@ -250,7 +330,7 @@
                 <img src="images/guonei_1.jpg" alt="">
             </div>
             <div class="guone_r">
-                <div class="row">
+                <div class="row" id="panshow4">
                     <div class="col-md-4">
                         <a href="route_detail.html">
                             <img src="images/jiangxuan_4.jpg" alt="">
@@ -323,7 +403,7 @@
                 <img src="images/jiangwai_1.jpg" alt="">
             </div>
             <div class="guone_r">
-                <div class="row">
+                <div class="row" id="panshow5">
                     <div class="col-md-4">
                         <a href="route_detail.html">
                             <img src="images/jiangxuan_4.jpg" alt="">

@@ -24,4 +24,6 @@ public interface RouteDao {
     public Route findOne(int rid);
 
     public List<Route> queryFavourite();
+
+    public List<Route> queryRandom();
 }
