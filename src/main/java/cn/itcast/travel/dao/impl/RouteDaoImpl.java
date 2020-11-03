@@ -75,6 +75,18 @@ public class RouteDaoImpl implements RouteDao {
     }
 
     @Override
+    public List<Route> findByPageFavourite() {
+        //String sql = "select * from tab_route where cid = ? and rname like ?  limit ? , ?";
+        String sql = " select * from tab_route where 1 = 1 ";
+        //1.定义sql模板
+        StringBuilder sb = new StringBuilder(sql);
+        sb.append(" order by count desc ");//分页条件
+        sql = sb.toString();
+        List params = new ArrayList();//条件们
+        return template.query(sql,new BeanPropertyRowMapper<Route>(Route.class),params.toArray());
+    }
+
+    @Override
     public Route findOne(int rid) {
         String sql = "select * from tab_route where rid = ?";
         return template.queryForObject(sql,new BeanPropertyRowMapper<Route>(Route.class),rid);
@@ -124,5 +136,14 @@ public class RouteDaoImpl implements RouteDao {
             params.add(random.nextInt(totalCount));
         }
         return template.query(sb.toString(), new BeanPropertyRowMapper<Route>(Route.class), params.toArray());
+    }
+
+    @Override
+    public void updateRouteByRid(int count, int rid) {
+        String sql = " update tab_route set count = ? where rid = ? ";
+        List params = new ArrayList();
+        params.add(count);
+        params.add(rid);
+        template.update(sql, params.toArray());
     }
 }

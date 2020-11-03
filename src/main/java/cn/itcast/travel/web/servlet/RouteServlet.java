@@ -64,6 +64,11 @@ public class RouteServlet extends BaseServlet {
 
     }
 
+    public void pageQueryFavourite(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        PageBean<Route> pb = routeService.pageQueryFavourite();
+        writeValue(pb,response);
+    }
+
     /**
      * 根据id查询一个旅游线路的详细信息
      * @param request

@@ -16,6 +16,8 @@ public interface RouteDao {
      */
     public List<Route> findByPage(int cid , int start , int pageSize,String rname);
 
+    public List<Route> findByPageFavourite();
+
     /**
      * 根据id查询
      * @param rid
@@ -26,4 +28,6 @@ public interface RouteDao {
     public List<Route> queryFavourite();
 
     public List<Route> queryRandom();
+
+    public void updateRouteByRid(int count, int rid);
 }

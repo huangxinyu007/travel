@@ -17,6 +17,8 @@ public interface RouteService {
      */
     public PageBean<Route> pageQuery(int cid,int currentPage,int pageSize,String rname);
 
+    public PageBean<Route> pageQueryFavourite();
+
     /**
      * 根据id查询
      * @param rid

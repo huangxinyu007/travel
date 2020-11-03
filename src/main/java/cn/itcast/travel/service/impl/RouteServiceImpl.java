@@ -33,7 +33,6 @@ public class RouteServiceImpl implements RouteService {
         pb.setCurrentPage(currentPage);
         //设置每页显示条数
         pb.setPageSize(pageSize);
-
         //设置总记录数
         int totalCount = routeDao.findTotalCount(cid,rname);
         pb.setTotalCount(totalCount);
@@ -41,12 +40,18 @@ public class RouteServiceImpl implements RouteService {
         int start = (currentPage - 1) * pageSize;//开始的记录数
         List<Route> list = routeDao.findByPage(cid,start,pageSize,rname);
         pb.setList(list);
-
         //设置总页数 = 总记录数/每页显示条数
         int totalPage = totalCount % pageSize == 0 ? totalCount / pageSize :(totalCount / pageSize) + 1 ;
         pb.setTotalPage(totalPage);
+        return pb;
+    }
 
-
+    @Override
+    public PageBean<Route> pageQueryFavourite() {
+        //封装PageBean
+        PageBean<Route> pb = new PageBean<Route>();
+        List<Route> list = routeDao.findByPageFavourite();
+        pb.setList(list);
         return pb;
     }
 
@@ -65,7 +70,8 @@ public class RouteServiceImpl implements RouteService {
 
         //4. 查询收藏次数
         int count = favoriteDao.findCountByRid(route.getRid());
-        route.setCount(count);
+        route.setCount(route.getCount() + count);
+        routeDao.updateRouteByRid(route.getCount(), route.getRid());
 
 
         return route;

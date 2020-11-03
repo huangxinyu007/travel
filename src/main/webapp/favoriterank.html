@@ -7,26 +7,161 @@
         <link rel="stylesheet" type="text/css" href="css/ranking-list.css">
         <script src="js/jquery-3.3.1.js"></script>
         <script>
-            $.get("route/queryFavourite",{},function (pb) {
-                var route_lis = "";
-                for (var i = 0; i < pb.list.length; i++) {
-                    //获取{rid:1,rname:"xxx"}
-                    var route = pb.list[i];
-
-                    var li =
-                        ' <div class="col-md-3">\n' +
-                        '     <a href="javascript:;">\n' +
-                        '        <img src="'+route.rimage+'" alt="">\n' +
-                        '        <div class="has_border">\n' +
-                        '            <h3>'+route.rname+'</h3>\n' +
-                        '            <div class="price">网付价<em>￥</em><strong>'+route.price+'</strong><em>起</em></div>\n' +
-                        '        </div>\n' +
-                        '     </a>\n' +
-                        ' </div>\n';
-                    route_lis += li;
-                }
-                $("#panshow1").html(route_lis);
+            var pbLists;
+            $(function () {
+                //当页码加载完成后，调用load方法，发送ajax请求加载数据
+                pbLists = load();
+                pageData(1, 8, 0, 0,"");
+                $("#queryData").click(function () {
+                    var startPrice = $("#startPrice").val();
+                    var endPrice = $("#endPrice").val();
+                    var rnames = $("#rnames").val();
+                    pageData(1, 8, startPrice, endPrice, rnames);
+                });
             });
+            function contains(subs,str){
+                return str.indexOf(subs)>=0?true:false;
+            }
+            function isNotNull(data){
+                if (data == "" || data == undefined || data == null || data == "null") {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            function pageData(curPage, pageCount, startPrice, endPrice, rname) {
+                var pbList = pbLists;
+                if (isNotNull(startPrice) && startPrice > 0) {
+                    var pbList1 = [];
+                    for (var i = 0; i < pbList.length; i++) {
+                        if (pbList[i].price >= startPrice) {
+                            pbList1.push(pbList[i]);
+                        }
+                    }
+                    pbList = pbList1;
+                } else {
+                    startPrice = 0;
+                }
+                if (isNotNull(endPrice) && endPrice > 0) {
+                    var pbList1 = [];
+                    for (var i = 0; i < pbList.length; i++) {
+                        if (pbList[i].price <= endPrice) {
+                            pbList1.push(pbList[i]);
+                        }
+                    }
+                    pbList = pbList1;
+                } else {
+                    endPrice = 0;
+                }
+                if (isNotNull(rname) && rname != "null") {
+                    var pbList1 = [];
+                    for (var i = 0; i < pbList.length; i++) {
+                        if (contains(rname, pbList[i].rname)) {
+                            pbList1.push(pbList[i]);
+                        }
+                    }
+                    pbList = pbList1;
+                } else {
+                    rname = "null";
+                }
+                var count = (curPage - 1) * pageCount;
+                var route_lis = "";
+                for (var i = count; i < count + pageCount; i++) {
+                    if (i < pbList.length) {
+                        var route = pbList[i];
+                        var li =
+                            ' <li>\n' +
+                            '     <span class="num">'+(i+1)+'</span>\n' +
+                            '     <a href="route_detail.html?rid='+route.rid+'"><img src="'+route.rimage+'" style="width: 180px; height: 140px" alt=""></a>\n' +
+                            '     <h4><a href="route_detail.html?rid='+route.rid+'">'+route.rname+'</a></h4>\n' +
+                            '     <p>\n' +
+                            '        <b class="price">&yen;<span>'+route.price+'</span>起</b>\n' +
+                            '        <span class="shouchang">已收藏'+route.count+'次</span>\n' +
+                            '     </p>\n' +
+                            ' </li>\n';
+                        route_lis += li;
+                    }
+                }
+                $("#panshow").html(route_lis);
+                var lis = "";
+                var fristPage = '<li onclick="javascipt:pageData(1, 8, '+ startPrice +','+ endPrice +',\''+rname+'\')"><a href="javascript:void(0)">首页</a></li>';
+                lis += fristPage;
+                //计算上一页的页码
+                var beforeNum =  curPage - 1;
+                if(beforeNum <= 0){
+                    beforeNum = 1;
+                }
+                var beforePage = '<li  onclick="javascipt:pageData('+beforeNum+',8,'+ startPrice +','+ endPrice +',\''+rname+'\')" class="threeword"><a href="javascript:void(0)">上一页</a></li>';
+                lis += beforePage;
+                var totalPage;
+                if (pbList.length % 8 == 0) {
+                    totalPage = Math.floor(pbList.length / 8);
+                } else {
+                    totalPage = Math.floor(pbList.length / 8) + 1;
+                }
+                var begin; // 开始位置
+                var end ; //  结束位置
+                //1.要显示10个页码
+                if(totalPage < 10){
+                    //总页码不够10页
+
+                    begin = 1;
+                    end = totalPage;
+                }else{
+                    //总页码超过10页
+
+                    begin = curPage - 5 ;
+                    end = curPage + 4 ;
+
+                    //2.如果前边不够5个，后边补齐10个
+                    if(begin < 1){
+                        begin = 1;
+                        end = begin + 9;
+                    }
+
+                    //3.如果后边不足4个，前边补齐10个
+                    if(end > totalPage){
+                        end = totalPage;
+                        begin = end - 9 ;
+                    }
+                }
+                for (var i = begin; i <= end ; i++) {
+                    var li;
+                    //判断当前页码是否等于i
+                    if(curPage == i){
+
+                        li = '<li class="curPage" onclick="javascipt:pageData('+i+', 8, '+ startPrice +','+ endPrice +',\''+rname+'\')"><a href="javascript:void(0)">'+i+'</a></li>';
+
+                    }else{
+                        //创建页码的li
+                        li = '<li onclick="javascipt:pageData('+i+',8,'+ startPrice +','+ endPrice +',\''+rname+'\')"><a href="javascript:void(0)">'+i+'</a></li>';
+                    }
+                    //拼接字符串
+                    lis += li;
+                }
+                var lastPage = '<li onclick="javascipt:pageData('+totalPage+', 8,'+ startPrice +','+ endPrice +',\''+rname+'\')"><a href="javascript:void(0)">末页</a></li>';
+                //计算上一页的页码
+                var beforeNum =  curPage + 1;
+                if(beforeNum >= totalPage){
+                    beforeNum = totalPage;
+                }
+                var nextPage = '<li  onclick="javascipt:pageData('+beforeNum+', 8,'+ startPrice +','+ endPrice +',\''+rname+'\')" class="threeword"><a href="javascript:void(0)">下一页</a></li>';
+
+                lis += nextPage;
+                lis += lastPage;
+
+                $("#showul").html(lis);
+
+            }
+
+            function load(){
+                var dataList;
+                $.ajaxSettings.async = false;
+                $.get("route/pageQueryFavourite",{},function (pb) {
+                    dataList = pb.list;
+                });
+                return dataList;
+            }
         </script>
     </head>
     <body>
@@ -35,13 +170,13 @@
         <div class="contant">
             <div class="shaixuan">
                 <span>线路名称</span>
-                <input type="text">
+                <input id="rnames" type="text">
                 <span>金额</span>
-                <input type="text">~<input type="text">
-                <button>搜索</button>
+                <input id="startPrice" type="text">~<input id="endPrice" type="text">
+                <button id="queryData">搜索</button>
             </div>
             <div class="list clearfix">
-                <ul>
+                <ul id="panshow">
                     <li>
                         <span class="num one">1</span>
                         <a href="route_detail.html"><img src="images/jiangxuan_4.jpg" alt=""></a>
@@ -117,7 +252,7 @@
                 </ul>
             </div>
             <div class="pageNum">
-                <ul>
+                <ul id="showul">
                     <li><a href="">首页</a></li>
                     <li class="threeword"><a href="#">上一页</a></li>
                     <li><a href="#">1</a></li>
